@@ -1,0 +1,52 @@
+defaults:
+  - _self_
+  - augmentations: symmetric.yaml
+  - wandb: private.yaml
+  - override hydra/hydra_logging: disabled
+  - override hydra/job_logging: disabled
+
+# disable hydra outputs
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+
+name: "simclr-name_dataset" # change here for cifar100
+method: "simclr"
+backbone:
+  name: "vit_base"
+method_kwargs:
+  proj_hidden_dim: 2048
+  proj_output_dim: 256
+  temperature: 0.2
+data:
+  dataset: custom # change here for cifar100
+  train_path: "path/to/train/data"
+  val_path: "path/to/val/data"
+  no_labels: True
+  format: "image_folder"
+  num_workers: 4
+optimizer:
+  name: "adamw"
+  batch_size: 128
+  lr: 2.0e-4
+  classifier_lr: 2.0e-4
+  weight_decay: 0.05
+  kwargs:
+    betas: [0.9, 0.95]
+scheduler:
+  name: "warmup_cosine"
+checkpoint:
+  enabled: True
+  dir: "trained_models"
+  frequency: 1
+auto_resume:
+  enabled: False
+
+# overwrite PL stuff
+max_epochs: 1000
+devices: [0]
+sync_batchnorm: True
+accelerator: "gpu"
+strategy: "ddp"
+precision: 16-mixed

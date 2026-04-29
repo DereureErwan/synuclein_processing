@@ -1,0 +1,15 @@
+torch
+torchvision
+pytorch-lightning
+scipy
+timm
+scikit-learn
+hydra-core
+matplotlib
+seaborn
+pandas
+umap-learn
+h5py
+SimpleCRF
+shapely
+scikit-image
